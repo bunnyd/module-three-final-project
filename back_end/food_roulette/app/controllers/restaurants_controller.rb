@@ -3,6 +3,8 @@ class RestaurantsController < ApplicationController
   end
 
   def index
+    restaurants = Restaurant.all
+    render json: restaurants
   end
 
   def create
