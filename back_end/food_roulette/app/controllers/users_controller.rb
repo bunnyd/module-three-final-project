@@ -3,6 +3,9 @@ class UsersController < ApplicationController
   end
 
   def index
+    render json: {
+      sample: "string"
+    }
   end
 
   def create
