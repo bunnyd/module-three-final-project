@@ -5,4 +5,12 @@ class User < ApplicationRecord
   validates :last_name, :presence => true
   validates :email, :presence => true, :uniqueness => true
   validates :username, :presence => true, :uniqueness => true
+
+  def self.search(search_food_type, search_price_range, search_zip_code, search_rating)
+    yelpBaseURL = "https://api.yelp.com/v3/businesses/search?";
+    yelpAPIKey = "JXu7Wwa0miaPPT1CkKGrX97vdRQJG8cOOyDmG6OkYNmTs55lCGpfG1dyzJUTIjJhkzORD3yFWCWG-gvkttv6eoA5JMzqh5PghtvBtlpZBkwzgSro9YhQfW8aM9phW3Yx";
+    yelpURL = "#{yelpBaseURL}term=#{search_food_type}&price=#{search_price_range}&location=#{search_zip_code}&rating=#{search_rating}"
+
+    return yelpURL
+  end
 end

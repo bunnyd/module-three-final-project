@@ -1,5 +1,6 @@
 class Api::V1::UsersController < ApplicationController
   before_action :user_params, only: [:create]
+  
 
   def show
   end

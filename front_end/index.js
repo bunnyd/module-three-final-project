@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 })
 
+
 submitUserForm = document.getElementById("sign-up")
 
 submitUserForm.addEventListener("submit", (event) => {
@@ -55,6 +56,43 @@ document.getElementById('signup-link').addEventListener('click', function(event)
 
   event.preventDefault();
 });
+
+
+
+// -------------------------------------------------------
+// YELP API
+// -------------------------------------------------------
+
+searchForm = document.getElementById('search-form')
+
+//event listener
+searchForm.addEventListener('submit', searchFood)
+
+
+function searchFood(event){
+  event.preventDefault();
+  // debugger
+
+  let searchFoodType = event.target[0].value;
+  let searchZipCode = event.target[1].value;
+  let searchPriceRange = event.target[2].value;
+  let searchRating = event.target[3].value;
+
+
+
+
+  // fetch(yelpURL, {
+  //   method: "GET",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //     "Accept": "application/json",
+  //     "Authorization": `Bearer ${yelpAPIKey}`
+  //   }
+  // })
+
+
+}
+
 
 
 // -------------------------------------------------------
@@ -115,3 +153,6 @@ function resetWheel() {
 
   wheelSpinning = false; // Reset to false to power buttons and spin can be clicked again.
 }
+
+//Yelp API
+//
