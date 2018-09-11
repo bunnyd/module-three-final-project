@@ -6,10 +6,23 @@ submitUserForm = document.getElementById("sign-up")
 
 submitUserForm.addEventListener("submit", (event) => {
   event.preventDefault()
-<<<<<<< HEAD
-  
-=======
->>>>>>> d0529f1a00b9f0df2d901c6dfca942807d31a870
+  let userFirstName = event.target[0].value
+  let userLastName = event.target[1].value
+  let userEmailAddress = event.target[2].value
+  let userUserName = event.target[3].value
+  fetch("http://localhost:3000/api/v1/users",{
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    body: JSON.stringify({
+      first_name: userFirstName,
+      last_name: userLastName,
+      email: userEmailAddress,
+      username: userUserName
+    })
+  })
 
 })
 
