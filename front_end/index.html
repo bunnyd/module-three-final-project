@@ -35,6 +35,12 @@
 
 	<!-- Header -->
 	<header>
+    <script src='Winwheel.js'></script>
+    <style>
+      #login-div {
+        display:none;
+      }
+    </style>
 		<!-- Header desktop -->
 		<div class="wrap-menu-header gradient1 trans-0-4">
 			<div class="container h-full">
@@ -247,19 +253,19 @@
 				Make an account!
 			</span>
 
-			<div class="wrap-input-signup size17 bo2 bo-rad-10 bgwhite pos-relative txt10 m-10">
+		  <div class="wrap-input-signup size17 bo2 bo-rad-10 bgwhite pos-relative txt10 m-10">
 				<input class="bo-rad-10 sizefull txt10 p-l-20" type="text" name="first-name" placeholder="First Name">
-				<i class="fa fa-envelope ab-r-m m-r-18" aria-hidden="true"></i>
+        <i class="fa fa-user ab-r-m m-r-18" aria-hidden="true"></i>
 			</div>
 
       <div class="wrap-input-signup size17 bo2 bo-rad-10 bgwhite pos-relative txt10 m-10">
 				<input class="bo-rad-10 sizefull txt10 p-l-20" type="text" name="last-name" placeholder="Last Name">
-				<i class="fa fa-envelope ab-r-m m-r-18" aria-hidden="true"></i>
+        <i class="fa fa-user ab-r-m m-r-18" aria-hidden="true"></i>
 			</div>
 
       <div class="wrap-input-signup size17 bo2 bo-rad-10 bgwhite pos-relative txt10 m-10">
 				<input class="bo-rad-10 sizefull txt10 p-l-20" type="text" name="user-name" placeholder="Username">
-				<i class="fa fa-envelope ab-r-m m-r-18" aria-hidden="true"></i>
+        <i class="fa fa-user ab-r-m m-r-18" aria-hidden="true"></i>
 			</div>
 
       <div class="wrap-input-signup size17 bo2 bo-rad-10 bgwhite pos-relative txt10 m-10">
@@ -267,15 +273,22 @@
 				<i class="fa fa-envelope ab-r-m m-r-18" aria-hidden="true"></i>
 			</div>
 
+
 			<!-- Button3 -->
 			<button type="submit" class="btn3 flex-c-m size18 txt11 trans-0-4 m-10">
 				Sign-up
 			</button>
+      <br>
+      <a href="#" class="txt4" id="login-link">
+        Have an account? Login here.
+        <i class="fa fa-long-arrow-right m-l-10" aria-hidden="true"></i>
+      </a>
 		</form>
 	</div>
 
   <!-- Login -->
   <div class="section-signup bg1-pattern p-t-85 p-b-85" id="login-div">
+
     <form class="flex-c-m flex-w flex-col-c-m-lg p-l-5 p-r-5" id="login">
       <span class="txt5 m-10">
         Login!
@@ -290,10 +303,60 @@
       <button type="submit" class="btn3 flex-c-m size18 txt11 trans-0-4 m-10">
         Submit
       </button>
+      <br></br>
+      <a href="#" class="txt4" id="signup-link">
+        Don't have an account? Sign up here.
+        <i class="fa fa-long-arrow-right m-l-10" aria-hidden="true"></i>
+      </a>
     </form>
+
   </div>
 
-	<!-- Welcome -->
+  <!-- Food Search -->
+	<div class="section-signup bg1-pattern p-t-85 p-b-85" id="search-div">
+		<form class="flex-c-m flex-w flex-col-c-m-lg p-l-5 p-r-5" id="search-form">
+			<span class="txt5 m-10">
+				What are you looking for?
+			</span>
+
+		  <div class="wrap-input-signup size17 bo2 bo-rad-10 bgwhite pos-relative txt10 m-10">
+				<input class="bo-rad-10 sizefull txt10 p-l-20" type="text" name="food_type" placeholder="Food Cuisine">
+				<i class="fa fa-search ab-r-m m-r-18" aria-hidden="true"></i>
+			</div>
+
+      <div class="wrap-input-signup size17 bo2 bo-rad-10 bgwhite pos-relative txt10 m-10">
+        <input class="bo-rad-10 sizefull txt10 p-l-20" type="text" name="zip_code" placeholder="Zip Code">
+        <i class="fa fa-map-marker ab-r-m m-r-18" aria-hidden="true"></i>
+      </div>
+
+      <div class="wrap-input-signup size17 bo2 bo-rad-10 bgwhite pos-relative txt10 m-10">
+        <select class="selection-1" name="price_range">
+          <option value="$">$</option>
+          <option value="$$">$$</option>
+          <option value="$$$">$$</option>
+          <option value="$$$$">$$$$</option>
+        </select>
+			</div>
+
+      <div class="wrap-input-signup size17 bo2 bo-rad-10 bgwhite pos-relative txt10 m-10">
+        <select class="selection-1" name="rating">
+          <option value="1">★</option>
+          <option value="2">★★</option>
+          <option value="3">★★★</option>
+          <option value="4">★★★★</option>
+          <option value="5">★★★★★</option>
+
+        </select>
+			</div>
+
+			<!-- Button3 -->
+			<button type="submit" class="btn3 flex-c-m size18 txt11 trans-0-4 m-10">
+				Search
+			</button>
+		</form>
+	</div>
+
+	<!-- Spin the wheel! -->
 	<section class="section-welcome bg-white p-t-120 p-b-105">
 		<div class="container">
 			<div class="row">
@@ -308,19 +371,98 @@
 						</h3>
 
 						<p class="t-center m-b-22 size3 m-l-r-auto">
-							Donec quis lorem nulla. Nunc eu odio mi. Morbi nec lobortis est. Sed fringilla, nunc sed imperdiet lacinia, nisl ante egestas mi, ac facilisis ligula sem id neque.
+							We're almost there!
 						</p>
 
-						<a href="about.html" class="txt4">
-							Our Story
-							<i class="fa fa-long-arrow-right m-l-10" aria-hidden="true"></i>
-						</a>
+            <button type="submit" class="btn3 flex-c-m size18 txt11 trans-0-4 m-l-r-auto" id="spin-button" onClick="startSpin();">
+              Spin
+            </button>
+            <a id="reset-wheel-link" href="#" onClick="resetWheel(); return false;">Reset</a><br />
+
+            <!-- <td>
+              <div class="power_controls">
+                  <br />
+                  <br />
+                  <table class="power" cellpadding="10" cellspacing="0">
+                      <tr>
+                          <th align="center">Power</th>
+                      </tr>
+                      <tr>
+                          <td width="78" align="center" id="pw3" onClick="powerSelected(3);">High</td>
+                      </tr>
+                      <tr>
+                          <td align="center" id="pw2" onClick="powerSelected(2);">Med</td>
+                      </tr>
+                      <tr>
+                          <td align="center" id="pw1" onClick="powerSelected(1);">Low</td>
+                      </tr>
+                  </table>
+                  <br />
+                  <img id="spin_button" src="http://dougtesting.net//elements/images/examples/spin_off.png" alt="Spin" onClick="startSpin();" />
+                  <br /><br />
+                  &nbsp;&nbsp;<a href="#" onClick="resetWheel(); return false;">Play Again</a><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(reset)
+              </div>
+          </td> -->
 					</div>
 				</div>
 
 				<div class="col-md-6 p-b-30">
 					<div class="wrap-pic-welcome size2 bo-rad-10 hov-img-zoom m-l-r-auto">
-						<img src="images/our-story-01.jpg" alt="IMG-OUR">
+            <td width="438" height="582" class="example_wheel_of_fortune" align="center" valign="center">
+                    <canvas id="canvas" width="400" height="400">
+                        <p style="{color: white}" align="center">Sorry, your browser doesn't support canvas. Please try another.</p>
+                    </canvas>
+                </td>
+          <div id="wheel">
+            <script>
+              var theWheel = new Winwheel({
+                  'outerRadius'     : 190,        // Set outer radius so wheel fits inside the background.
+                  'innerRadius'     : 50,         // Make wheel hollow so segments dont go all way to center.
+                  'textFontSize'    : 12,         // Set default font size for the segments.
+                  'textOrientation' : 'horizontal', // Make text vertial so goes down from the outside of wheel.
+                  'textAlignment'   : 'inner',    // Align text to outside of wheel.
+                  'numSegments'     : 7,         // Specify number of segments.
+                  'segments'        :             // Define segments including colour and text.
+                  [                               // font size and text colour overridden on backrupt segments.
+                     {'fillStyle' : '#ee1c24', 'text' : 'Olive Garden'},
+                     {'fillStyle' : '#3cb878', 'text' : 'Burger King'},
+                     {'fillStyle' : '#f6989d', 'text' : 'McDonalds'},
+                     {'fillStyle' : '#00aef0', 'text' : 'Popeyes'},
+                     {'fillStyle' : '#f26522', 'text' : 'Chipotle'},
+                     {'fillStyle' : '#fff200', 'text' : 'Shipleys'},
+                     {'fillStyle' : '#00aef0', 'text' : 'Fat Bao'}
+                  ],
+                  'animation' :           // Specify the animation to use.
+                  {
+                      'type'     : 'spinToStop',
+                      'duration' : 8,
+                      'spins'    : 3,
+                      'callbackFinished' : alertPrize
+                  }
+              });
+
+              // Called when the animation has finished.
+              function alertPrize(indicatedSegment)
+              {
+                alert("Enjoy your meal at " + indicatedSegment.text + "!");
+
+                  // // Display different message if win/lose/backrupt.
+                  // if (indicatedSegment.text == 'LOOSE TURN')
+                  // {
+                  //     alert('Sorry but you loose a turn.');
+                  // }
+                  // else if (indicatedSegment.text == 'BANKRUPT')
+                  // {
+                  //     alert('Oh no, you have gone BANKRUPT!');
+                  // }
+                  // else
+                  // {
+                  //     alert("You have won " + indicatedSegment.text);
+                  // }
+              }
+          </script>
+        </div>
+						<!-- <img src="images/our-story-01.jpg" alt="IMG-OUR"> -->
 					</div>
 				</div>
 			</div>
@@ -872,6 +1014,8 @@
 <!--===============================================================================================-->
 	<script src="js/main.js"></script>
 	<script src="index.js"></script>
+  <script type="text/javascript" src="http://dougtesting.net/elements/javascript/TweenMax.min.js"></script>
+
 
 </body>
 </html>
