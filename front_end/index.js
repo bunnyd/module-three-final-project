@@ -79,8 +79,6 @@ function searchFood(event){
   let searchRating = event.target[3].value;
 
 
-
-
   // fetch(yelpURL, {
   //   method: "GET",
   //   headers: {
@@ -90,10 +88,7 @@ function searchFood(event){
   //   }
   // })
 
-
 }
-
-
 
 // -------------------------------------------------------
 // WHEEL FUNCTIONALITY
@@ -147,12 +142,9 @@ function resetWheel() {
   theWheel.rotationAngle = 0; // Re-set the wheel angle to 0 degrees.
   theWheel.draw(); // Call draw to render changes to the wheel.
 
-  document.getElementById('pw1').className = ""; // Remove all colours from the power level indicators.
-  document.getElementById('pw2').className = "";
-  document.getElementById('pw3').className = "";
+  // document.getElementById('pw1').className = ""; // Remove all colours from the power level indicators.
+  // document.getElementById('pw2').className = "";
+  // document.getElementById('pw3').className = "";
 
   wheelSpinning = false; // Reset to false to power buttons and spin can be clicked again.
 }
-
-//Yelp API
-//
