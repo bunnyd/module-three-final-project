@@ -35,7 +35,9 @@ class Api::V1::UsersController < ApplicationController
     yelpURL = "#{yelpBaseURL}term=#{params[:search_food_type]}&price=#{params[:search_price_range]}&location=#{params[:search_zip_code]}&rating=#{params[:search_rating]}"
     response = RestClient.get(yelpURL, {'Authorization' => "Bearer #{yelpAPIKey}"  })
     result = JSON.parse(response.body)
-    byebug
+
+    render json: result
+    # byebug
   end
 
   private
