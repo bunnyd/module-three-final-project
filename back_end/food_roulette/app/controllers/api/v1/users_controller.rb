@@ -32,8 +32,9 @@ class Api::V1::UsersController < ApplicationController
   def search
     yelpBaseURL = "https://api.yelp.com/v3/businesses/search?"
     yelpAPIKey = "JXu7Wwa0miaPPT1CkKGrX97vdRQJG8cOOyDmG6OkYNmTs55lCGpfG1dyzJUTIjJhkzORD3yFWCWG-gvkttv6eoA5JMzqh5PghtvBtlpZBkwzgSro9YhQfW8aM9phW3Yx"
-    yelpURL = "#{yelpBaseURL}term=#{params[:search_food_type]}&price=#{params[:search_price_range]}&location=#{params[:search_zip_code]}&rating=#{params[:search_rating]}"
+    yelpURL = "#{yelpBaseURL}term=#{params[:search_food_type]}&price=#{params[:search_price_range]}&location=#{params[:search_zip_code]}"
     response = RestClient.get(yelpURL, {'Authorization' => "Bearer #{yelpAPIKey}"  })
+
     result = JSON.parse(response.body)
 
     render json: result
