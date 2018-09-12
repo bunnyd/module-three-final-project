@@ -3,14 +3,40 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 
-submitUserForm = document.getElementById("sign-up")
+signupUserForm = document.getElementById("sign-up");
+loginUserForm = document.getElementById("login");
 
-submitUserForm.addEventListener("submit", (event) => {
+loginUserForm.addEventListener("submit", (event) => {
+  event.preventDefault()
+  let userEmailAddress = event.target[0].value;
+  fetch("http://localhost:3000/api/v1/users/login", {
+     method: 'POST',
+     headers: {
+       'Content-Type': 'application/json',
+       'Accept': 'application/json'
+     },
+     body: JSON.stringify({email: userEmailAddress})
+  })
+    .then(resp => resp.json())
+    .then(user => createSession(user, userEmailAddress))
+  //Make session request
+})
+
+function createSession(user,userEmailAddress){
+  debugger
+  loginUserForm.reset(); //Reset login User Form
+    if (userEmailAddress === user.email){
+      sessionStorage.setItem("email", userEmailAddress);
+    }
+}//end validateUser
+
+signupUserForm.addEventListener("submit", (event) => {
   event.preventDefault()
   let userFirstName = event.target[0].value
   let userLastName = event.target[1].value
-  let userEmailAddress = event.target[2].value
-  let userUserName = event.target[3].value
+  let userUserName = event.target[2].value
+  let userEmailAddress = event.target[3].value
+
   fetch("http://localhost:3000/api/v1/users",{
     method: "POST",
     headers: {

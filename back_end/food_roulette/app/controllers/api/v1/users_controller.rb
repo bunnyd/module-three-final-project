@@ -1,6 +1,6 @@
 class Api::V1::UsersController < ApplicationController
   before_action :user_params, only: [:create]
-  
+
 
   def show
   end
@@ -8,7 +8,12 @@ class Api::V1::UsersController < ApplicationController
   def index
     users = User.all
     render json: users
+  end
 
+  def login
+    user = User.where("email=?",params[:email])
+    byebug
+    render json: user
   end
 
   def create
@@ -16,6 +21,7 @@ class Api::V1::UsersController < ApplicationController
 
     if user.valid?
       user.save
+      session[:user_id] = user.id
     else
       user.errors
     end
