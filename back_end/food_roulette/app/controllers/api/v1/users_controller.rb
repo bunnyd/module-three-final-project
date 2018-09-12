@@ -11,9 +11,9 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def login
-    user = User.where("email=?",params[:email])
-    byebug
-    render json: user
+    users = User.where("email=?",params[:email])
+    session[:user_id] = users.first.id
+    render json: users.first
   end
 
   def create
@@ -22,10 +22,20 @@ class Api::V1::UsersController < ApplicationController
     if user.valid?
       user.save
       session[:user_id] = user.id
+
     else
       user.errors
     end
     # User.create(user_params)
+  end
+
+  def search
+    yelpBaseURL = "https://api.yelp.com/v3/businesses/search?"
+    yelpAPIKey = "JXu7Wwa0miaPPT1CkKGrX97vdRQJG8cOOyDmG6OkYNmTs55lCGpfG1dyzJUTIjJhkzORD3yFWCWG-gvkttv6eoA5JMzqh5PghtvBtlpZBkwzgSro9YhQfW8aM9phW3Yx"
+    yelpURL = "#{yelpBaseURL}term=#{params[:search_food_type]}&price=#{params[:search_price_range]}&location=#{params[:search_zip_code]}&rating=#{params[:search_rating]}"
+    response = RestClient.get(yelpURL, {'Authorization' => "Bearer #{yelpAPIKey}"  })
+    result = JSON.parse(response.body)
+    byebug
   end
 
   private

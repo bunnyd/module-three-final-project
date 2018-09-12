@@ -11,6 +11,7 @@ loginUserForm.addEventListener("submit", (event) => {
   let userEmailAddress = event.target[0].value;
   fetch("http://localhost:3000/api/v1/users/login", {
      method: 'POST',
+     credentials: 'same-origin',
      headers: {
        'Content-Type': 'application/json',
        'Accept': 'application/json'
@@ -23,11 +24,15 @@ loginUserForm.addEventListener("submit", (event) => {
 })
 
 function createSession(user,userEmailAddress){
-  debugger
   loginUserForm.reset(); //Reset login User Form
-    if (userEmailAddress === user.email){
-      sessionStorage.setItem("email", userEmailAddress);
-    }
+  if (user.email === userEmailAddress) {
+    sessionStorage.setItem("id", user.id);
+    // Hide login and signup div
+    document.getElementById('login-div').style.display = 'none';
+    document.getElementById('sign-up-div').style.display = 'none';
+  } else {
+    alert("Please enter a valid email address.")
+  }
 }//end validateUser
 
 signupUserForm.addEventListener("submit", (event) => {
@@ -39,6 +44,7 @@ signupUserForm.addEventListener("submit", (event) => {
 
   fetch("http://localhost:3000/api/v1/users",{
     method: "POST",
+    credentials: 'same-origin',
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json"
@@ -74,10 +80,10 @@ document.getElementById('login-link').addEventListener('click', function(event) 
 
 // Listen for "sign up link?" click
 document.getElementById('signup-link').addEventListener('click', function(event) {
-  // Hide sign-up div
+  // Hide login div
   document.getElementById('login-div').style.display = 'none';
 
-  // Show login div
+  // Show signup div
   document.getElementById('sign-up-div').style.display = 'block';
 
   event.preventDefault();
@@ -89,10 +95,9 @@ document.getElementById('signup-link').addEventListener('click', function(event)
 // YELP API
 // -------------------------------------------------------
 
-searchForm = document.getElementById('search-form')
-
+searchForm = document.getElementById('search-form');
 //event listener
-searchForm.addEventListener('submit', searchFood)
+searchForm.addEventListener('submit', searchFood);
 
 
 function searchFood(event){
@@ -103,16 +108,21 @@ function searchFood(event){
   let searchZipCode = event.target[1].value;
   let searchPriceRange = event.target[2].value;
   let searchRating = event.target[3].value;
+  fetch("http://localhost:3000/api/v1/users/search", {
+    method: "POST",
+    credentials: 'same-origin',
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    body: JSON.stringify({
+      search_food_type: searchFoodType,
+      search_zip_code: searchZipCode,
+      search_price_range: searchPriceRange,
+      search_rating: searchRating
+    })
+  })
 
-
-  // fetch(yelpURL, {
-  //   method: "GET",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //     "Accept": "application/json",
-  //     "Authorization": `Bearer ${yelpAPIKey}`
-  //   }
-  // })
 
 }
 
@@ -174,3 +184,9 @@ function resetWheel() {
 
   wheelSpinning = false; // Reset to false to power buttons and spin can be clicked again.
 }
+
+// Got the session
+//search while the user is logged in
+//user sessionStorage.getItem("email") to check the session
+//search and iterate through yelp API
+//save results to restaurant database
