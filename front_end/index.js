@@ -299,40 +299,54 @@ function displayRestaurants(restaurants) {
   // Function for accept button.
   // -------------------------------------------------------
   function acceptRestaurant(event) {
+    debugger
     event.preventDefault();
     //Save to backend - user and restaurant name, location,
 
-
-
+    // fetch => post to the restaurants URL
+    fetch("http://localhost:3000/api/v1/restaurants", {
+      method: "POST",
+      credentials: 'same-origin',
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify({
+        name: restaurant.name,
+        address: restaurant.address,
+        food_type: restaurant.food_type,
+        price_range: restaurant.price_range,
+        rating: restaurant.rating
+      })
+    })
+    .then(res => res.json())
+    .then(restaurant => addRestaurantToUser(restaurant))
   }
+}
 
+function addRestaurantToUser(restaurant) {
+  // fetch => post to the user_restaurants URL to associate with user
+  fetch("http://localhost:3000/api/v1/userrestaurants", {
+    method: "POST",
+    credentials: 'same-origin',
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    body: JSON.stringify({
+      restaurant_id: restaurant.id,
+      user_id: sessionStorage.getItem("id")
+    })
+  })
 }
 
 // -------------------------------------------------------
 // Called when the animation has finished.
 // -------------------------------------------------------
 function alertRestaurant(indicatedSegment) {
-  debugger
   alert("Enjoy your meal at " + indicatedSegment.text + "!");
-  // // Display different message if win/lose/backrupt.
-  // if (indicatedSegment.text == 'LOSE TURN')
-  // {
-  //     alert('Sorry but you lose a turn.');
-  // }
-  // else if (indicatedSegment.text == 'BANKRUPT')
-  // {
-  //     alert('Oh no, you have gone BANKRUPT!');
-  // }
-  // else
-  // {
-  //     alert("You have won " + indicatedSegment.text);
-  // }
+
 }
-
-
-// -------------------------------------------------------
-// WHEEL FUNCTIONALITY
-// -------------------------------------------------------
 
 
 

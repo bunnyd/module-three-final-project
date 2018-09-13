@@ -3,6 +3,8 @@ class Api::V1::UsersController < ApplicationController
 
 
   def show
+    user = User.where("id=?",params[:id])
+    render json: user
   end
 
   def index
@@ -38,6 +40,10 @@ class Api::V1::UsersController < ApplicationController
 
     render json: result
     # byebug
+  end
+
+  def add_restaurant
+    UserRestaurant.create(user_id: params[:user_id], restaurant_id: params[:restaurant_id])
   end
 
   private
