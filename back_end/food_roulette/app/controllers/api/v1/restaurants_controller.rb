@@ -1,4 +1,6 @@
-class RestaurantsController < ApplicationController
+class Api::V1::RestaurantsController < ApplicationController
+  before_action :restaurant_params
+
   def show
   end
 
@@ -9,10 +11,9 @@ class RestaurantsController < ApplicationController
 
   def create
     restaurant = Restaurant.new(restaurant_params)
-
     if restaurant.valid?
       restaurant.save
-      session[:user_id] = restaurant.id
+      render json: restaurant
     else
       render json: restaurant.errors
     end

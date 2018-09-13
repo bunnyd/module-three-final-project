@@ -87,6 +87,7 @@ loginUserForm.addEventListener("submit", (event) => {
 // -------------------------------------------------------
 // Create session after user logs in
 // -------------------------------------------------------
+
 function createSession(user, userEmailAddress) {
   loginUserForm.reset(); //Reset login User Form
   if (user.email.toLowerCase() === userEmailAddress.toLowerCase()) {
@@ -157,7 +158,7 @@ function showAlert(div_id, form, message, errorTypeClass) {
 
   // Add span
   span.innerHTML += `${message}`;
-  // debugger
+  // 
   //Add Text
   // span.appendChild(document.createTextNode(message));
 
@@ -176,7 +177,7 @@ function showAlert(div_id, form, message, errorTypeClass) {
 // Display Sign-up message
 // -------------------------------------------------------
 function signupMessage(message, email) {
-  // debugger
+  // 
   if (message.success) {
     // no errors, display successful message
     showAlert(loginUserDiv, loginUserForm, `Account for ${email} has been added!`, "success")
@@ -187,7 +188,7 @@ function signupMessage(message, email) {
     document.getElementById('login-div').style.display = 'block';
   }
   else {
-    debugger
+
     showAlert(signupUserDiv, signupUserForm, JSON.stringify(message), "error")
   }
 
@@ -203,13 +204,11 @@ function searchFood(event) {
   event.preventDefault();
 
   if (sessionStorage.getItem("id")) {
-
-    // debugger
-
     let searchFoodType = event.target[0].value;
     let searchZipCode = event.target[1].value;
     let searchPriceRange = event.target[2].value;
 
+    //this is what puts the restaurants on the wheel.
     fetch("http://localhost:3000/api/v1/users/search", {
         method: "POST",
         credentials: 'same-origin',
@@ -233,10 +232,73 @@ function searchFood(event) {
 
 function displayRestaurants(restaurants) {
   const wheel = document.getElementById("wheel");
-
+  console.log(restaurants)
   var businesses = restaurants.businesses
+  
   var length = 22;
-  // debugger
+
+  function selectedRestaurant(randomlySelectedRestaurant) {
+    alert("Would you like to eat at " + randomlySelectedRestaurant.text + "?");
+    
+    document.getElementById('accept-wheel-link').addEventListener('click', event => acceptRestaurant(event, randomlySelectedRestaurant));
+  }
+
+
+  // -------------------------------------------------------
+  // Function for accept button.
+  // -------------------------------------------------------
+  function acceptRestaurant(event, acceptedRestaurant) {
+    event.preventDefault();
+    //Save to backend - user and restaurant name, location,
+    
+    // fetch => post to the restaurants URL
+    restaurantId = acceptedRestaurant.id
+
+    businesses.forEach(business => {
+      if (acceptedRestaurant.id === business.id){
+        
+        //creates restaurant object if the user presses accept
+        fetch("http://localhost:3000/api/v1/restaurants", {
+          method: "POST",
+          credentials: 'same-origin',
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify({
+            name: business.name,
+            address: business.location.address1,
+            food_type: business.categories[0].alias,
+            price_range: business.price,
+            rating: business.rating
+          })
+        })//end fetch
+        .then(res => res.json())
+        .then(restaurant => addRestaurantToUser(restaurant))
+      }//end if (acceptedRestaurant.id === restaurantId)
+    })//end businesses.forEach
+  }//end acceptRestaurant function
+
+  function addRestaurantToUser(restaurant) {
+    // fetch => post to the user_restaurants URL to associate with user
+    // Can't post to this URL because we don't have the data from the Yelp API.
+    // how do we get data?
+    console.log(sessionStorage.getItem("id"))
+    fetch(`http://localhost:3000/api/v1/users/${sessionStorage.getItem("id")}`, {
+      method: "PUT",
+      credentials: 'same-origin',
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify({
+        restaurant_id: restaurant.id,
+        user_id: sessionStorage.getItem("id")
+      })
+    })
+  }
+
+
 
   var theWheel = new Winwheel({
     'outerRadius': 190, // Set outer radius so wheel fits inside the background.
@@ -249,34 +311,42 @@ function displayRestaurants(restaurants) {
       [ // font size and text colour overridden on backrupt segments.
         {
           'fillStyle': '#ee1c24',
+          'id': businesses[0].id,
           'text': businesses[0].name.length > length ? businesses[0].name.substring(0, length - 2) + "..." : businesses[0].name
         },
         {
           'fillStyle': '#3cb878',
+          'id': businesses[1].id,
           'text': businesses[1].name.length > length ? businesses[1].name.substring(0, length - 2) + "..." : businesses[1].name
         },
         {
           'fillStyle': '#f6989d',
+          'id': businesses[2].id,
           'text': businesses[2].name.length > length ? businesses[2].name.substring(0, length - 2) + "..." : businesses[2].name
         },
         {
           'fillStyle': '#00aef0',
+          'id': businesses[3].id,
           'text': businesses[3].name.length > length ? businesses[3].name.substring(0, length - 2) + "..." : businesses[3].name
         },
         {
           'fillStyle': '#f26522',
+          'id': businesses[4].id,
           'text': businesses[4].name.length > length ? businesses[4].name.substring(0, length - 2) + "..." : businesses[4].name
         },
         {
           'fillStyle': '#fff200',
+          'id': businesses[5].id,
           'text': businesses[5].name.length > length ? businesses[5].name.substring(0, length - 2) + "..." : businesses[5].name
         },
         {
           'fillStyle': '#00aef0',
+          'id': businesses[6].id,
           'text': businesses[6].name.length > length ? businesses[6].name.substring(0, length - 2) + "..." : businesses[6].name
         },
         {
           'fillStyle': '#00aef0',
+          'id': businesses[7].id,
           'text': businesses[7].name.length > length ? businesses[7].name.substring(0, length - 2) + "..." : businesses[7].name
         }
       ],
@@ -285,15 +355,15 @@ function displayRestaurants(restaurants) {
       'type': 'spinToStop',
       'duration': 8,
       'spins': 3,
-      'callbackFinished': alertRestaurant,
+      'callbackFinished': selectedRestaurant,
       'soundTrigger': "pin"
     }
-  });
+  })
 
   // Wheel event listeners
   document.getElementById('spin-button').addEventListener('click', startSpin);
   document.getElementById('reset-wheel-link').addEventListener('click', resetWheel);
-  document.getElementById('accept-wheel-link').addEventListener('click', acceptRestaurant);
+
 
   // Vars used by the code in this page to do power controls.
   var wheelPower = 0;
@@ -325,56 +395,4 @@ function displayRestaurants(restaurants) {
     theWheel.draw(); // Call draw to render changes to the wheel.
     wheelSpinning = false; // Reset to false to power buttons and spin can be clicked again.
   }
-
-  // -------------------------------------------------------
-  // Function for accept button.
-  // -------------------------------------------------------
-  function acceptRestaurant(event) {
-    debugger
-    event.preventDefault();
-    //Save to backend - user and restaurant name, location,
-
-    // fetch => post to the restaurants URL
-    fetch("http://localhost:3000/api/v1/restaurants", {
-      method: "POST",
-      credentials: 'same-origin',
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      body: JSON.stringify({
-        name: restaurant.name,
-        address: restaurant.address,
-        food_type: restaurant.food_type,
-        price_range: restaurant.price_range,
-        rating: restaurant.rating
-      })
-    })
-    .then(res => res.json())
-    .then(restaurant => addRestaurantToUser(restaurant))
-  }
-}
-
-function addRestaurantToUser(restaurant) {
-  // fetch => post to the user_restaurants URL to associate with user
-  fetch("http://localhost:3000/api/v1/userrestaurants", {
-    method: "POST",
-    credentials: 'same-origin',
-    headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json"
-    },
-    body: JSON.stringify({
-      restaurant_id: restaurant.id,
-      user_id: sessionStorage.getItem("id")
-    })
-  })
-}
-
-// -------------------------------------------------------
-// Called when the animation has finished.
-// -------------------------------------------------------
-function alertRestaurant(indicatedSegment) {
-  alert("Enjoy your meal at " + indicatedSegment.text + "!");
-
 }

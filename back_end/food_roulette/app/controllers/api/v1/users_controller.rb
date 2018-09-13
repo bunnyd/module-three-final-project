@@ -42,10 +42,9 @@ class Api::V1::UsersController < ApplicationController
     result = JSON.parse(response.body)
 
     render json: result
-    # byebug
   end
 
-  def add_restaurant
+  def update
     UserRestaurant.create(user_id: params[:user_id], restaurant_id: params[:restaurant_id])
   end
 
