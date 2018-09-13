@@ -158,7 +158,7 @@ function showAlert(div_id, form, message, errorTypeClass) {
 
   // Add span
   span.innerHTML += `${message}`;
-  // 
+  //
   //Add Text
   // span.appendChild(document.createTextNode(message));
 
@@ -177,7 +177,7 @@ function showAlert(div_id, form, message, errorTypeClass) {
 // Display Sign-up message
 // -------------------------------------------------------
 function signupMessage(message, email) {
-  // 
+  //
   if (message.success) {
     // no errors, display successful message
     showAlert(loginUserDiv, loginUserForm, `Account for ${email} has been added!`, "success")
@@ -234,12 +234,12 @@ function displayRestaurants(restaurants) {
   const wheel = document.getElementById("wheel");
   console.log(restaurants)
   var businesses = restaurants.businesses
-  
+
   var length = 22;
 
   function selectedRestaurant(randomlySelectedRestaurant) {
     alert("Would you like to eat at " + randomlySelectedRestaurant.text + "?");
-    
+
     document.getElementById('accept-wheel-link').addEventListener('click', event => acceptRestaurant(event, randomlySelectedRestaurant));
   }
 
@@ -250,31 +250,32 @@ function displayRestaurants(restaurants) {
   function acceptRestaurant(event, acceptedRestaurant) {
     event.preventDefault();
     //Save to backend - user and restaurant name, location,
-    
+
     // fetch => post to the restaurants URL
     restaurantId = acceptedRestaurant.id
 
     businesses.forEach(business => {
       if (acceptedRestaurant.id === business.id){
-        
+
         //creates restaurant object if the user presses accept
-        fetch("http://localhost:3000/api/v1/restaurants", {
-          method: "POST",
+        fetch(`http://localhost:3000/api/v1/users/${sessionStorage.getItem("id")}`, {
+          method: "PATCH",
           credentials: 'same-origin',
           headers: {
             "Content-Type": "application/json",
             "Accept": "application/json"
           },
           body: JSON.stringify({
-            name: business.name,
+            restaurants_attributes: [{name: business.name,
             address: business.location.address1,
             food_type: business.categories[0].alias,
             price_range: business.price,
-            rating: business.rating
+            rating: business.rating}]
           })
         })//end fetch
         .then(res => res.json())
-        .then(restaurant => addRestaurantToUser(restaurant))
+        .then(console.log)
+//        .then(restaurant => addRestaurantToUser(restaurant))
       }//end if (acceptedRestaurant.id === restaurantId)
     })//end businesses.forEach
   }//end acceptRestaurant function

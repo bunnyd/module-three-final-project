@@ -45,11 +45,12 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def update
-    UserRestaurant.create(user_id: params[:user_id], restaurant_id: params[:restaurant_id])
+    user = User.find(params[:id])
+    user.update(user_params)
   end
 
   private
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :email, :username)
+    params.require(:user).permit(:first_name, :last_name, :email, :username, restaurants_attributes:[[ :name, :address, :food_type, :price_range, :rating]])
   end
 end

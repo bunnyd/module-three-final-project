@@ -5,6 +5,7 @@ class User < ApplicationRecord
   validates :last_name, :presence => true
   validates :email, :presence => true, :uniqueness => true
   validates :username, :presence => true, :uniqueness => true
+  accepts_nested_attributes_for :restaurants 
 
 
 end
