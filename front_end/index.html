@@ -39,8 +39,39 @@
 	<header>
 		<script src='Winwheel.js'></script>
 		<style>
-			#login-div {
+			#login-div,
+			#search-div {
 				display: none;
+			}
+
+			/* style for error/success messages */
+			.success,
+			.error {
+				color: white;
+				padding: 5px;
+				margin: 5px 0 15px 0;
+			}
+
+			.success {
+				background: green;
+			}
+
+			.error {
+				background: red;
+			}
+
+			/* style for google maps */
+			#map {
+				height: 100%;
+			}
+
+			/* Optional: Makes the sample page fill the window. */
+
+			html,
+			body {
+				height: 100%;
+				margin: 0;
+				padding: 0;
 			}
 		</style>
 		<!-- Header desktop -->
@@ -138,40 +169,40 @@
 
 			<!-- Gallery -->
 			<div class="wrap-gallery-sidebar flex-w">
-				<a class="item-gallery-sidebar wrap-pic-w" href="images/photo-gallery-01.jpg" data-lightbox="gallery-footer">
-					<img src="images/photo-gallery-thumb-01.jpg" alt="GALLERY">
+				<a class="item-gallery-sidebar wrap-pic-w" href="images/food-1.jpg" data-lightbox="gallery-footer">
+					<img src="images/food-1.jpg" alt="GALLERY">
 				</a>
 
-				<a class="item-gallery-sidebar wrap-pic-w" href="images/photo-gallery-02.jpg" data-lightbox="gallery-footer">
-					<img src="images/photo-gallery-thumb-02.jpg" alt="GALLERY">
+				<a class="item-gallery-sidebar wrap-pic-w" href="images/food-2.jpg" data-lightbox="gallery-footer">
+					<img src="images/food-2.jpg" alt="GALLERY">
 				</a>
 
-				<a class="item-gallery-sidebar wrap-pic-w" href="images/photo-gallery-03.jpg" data-lightbox="gallery-footer">
-					<img src="images/photo-gallery-thumb-03.jpg" alt="GALLERY">
+				<a class="item-gallery-sidebar wrap-pic-w" href="images/food-3.jpg" data-lightbox="gallery-footer">
+					<img src="images/food-3.jpg" alt="GALLERY">
 				</a>
 
-				<a class="item-gallery-sidebar wrap-pic-w" href="images/photo-gallery-05.jpg" data-lightbox="gallery-footer">
-					<img src="images/photo-gallery-thumb-05.jpg" alt="GALLERY">
+				<a class="item-gallery-sidebar wrap-pic-w" href="images/food-4.jpg" data-lightbox="gallery-footer">
+					<img src="images/food-4.jpg" alt="GALLERY">
 				</a>
 
-				<a class="item-gallery-sidebar wrap-pic-w" href="images/photo-gallery-06.jpg" data-lightbox="gallery-footer">
-					<img src="images/photo-gallery-thumb-06.jpg" alt="GALLERY">
+				<a class="item-gallery-sidebar wrap-pic-w" href="images/food-8.jpg" data-lightbox="gallery-footer">
+					<img src="images/food-8.jpg" alt="GALLERY">
 				</a>
 
-				<a class="item-gallery-sidebar wrap-pic-w" href="images/photo-gallery-07.jpg" data-lightbox="gallery-footer">
-					<img src="images/photo-gallery-thumb-07.jpg" alt="GALLERY">
+				<a class="item-gallery-sidebar wrap-pic-w" href="images/food-6.jpg" data-lightbox="gallery-footer">
+					<img src="images/food-6.jpg" alt="GALLERY">
 				</a>
 
-				<a class="item-gallery-sidebar wrap-pic-w" href="images/photo-gallery-09.jpg" data-lightbox="gallery-footer">
-					<img src="images/photo-gallery-thumb-09.jpg" alt="GALLERY">
+				<a class="item-gallery-sidebar wrap-pic-w" href="images/food-7.jpg" data-lightbox="gallery-footer">
+					<img src="images/food-7.jpg" alt="GALLERY">
 				</a>
 
-				<a class="item-gallery-sidebar wrap-pic-w" href="images/photo-gallery-10.jpg" data-lightbox="gallery-footer">
-					<img src="images/photo-gallery-thumb-10.jpg" alt="GALLERY">
+				<a class="item-gallery-sidebar wrap-pic-w" href="images/food-5.jpg" data-lightbox="gallery-footer">
+					<img src="images/food-5.jpg" alt="GALLERY">
 				</a>
 
-				<a class="item-gallery-sidebar wrap-pic-w" href="images/photo-gallery-11.jpg" data-lightbox="gallery-footer">
-					<img src="images/photo-gallery-thumb-11.jpg" alt="GALLERY">
+				<a class="item-gallery-sidebar wrap-pic-w" href="images/food-9.jpg" data-lightbox="gallery-footer">
+					<img src="images/food-9.jpg" alt="GALLERY">
 				</a>
 			</div>
 		</div>
@@ -369,17 +400,6 @@
         </select>
 			</div>
 
-			<div class="wrap-input-signup size17 bo2 bo-rad-10 bgwhite pos-relative txt10 m-10">
-				<select class="selection-1" name="rating">
-          <option value="1">★</option>
-          <option value="2">★★</option>
-          <option value="3">★★★</option>
-          <option value="4">★★★★</option>
-          <option value="5">★★★★★</option>
-
-        </select>
-			</div>
-
 			<!-- Button3 -->
 			<button type="submit" class="btn3 flex-c-m size18 txt11 trans-0-4 m-10">
 				Search
@@ -388,7 +408,7 @@
 	</div>
 
 	<!-- Spin the wheel! -->
-	<section class="section-welcome bg-white p-t-120 p-b-105">
+	<section id="wheel-section" class="section-welcome bg-white p-t-120 p-b-105">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-6 p-t-45 p-b-30">
@@ -409,6 +429,7 @@
               Spin
             </button>
 						<a id="reset-wheel-link" href="#" onClick="resetWheel(); return false;">Reset</a><br />
+						<a id="accept-wheel-link" href="#" onClick="acceptRestaurant(); return false;">Accept</a><br />
 
 						<!-- <td>
               <div class="power_controls">
@@ -595,109 +616,31 @@
 		<!-- - -->
 		<div class="title-review t-center m-b-2">
 			<span class="tit2 p-l-15 p-r-15">
-				Customers Say
+				Check the
 			</span>
 
 			<h3 class="tit8 t-center p-l-20 p-r-15 p-t-3">
-				Review
+				Location
 			</h3>
 		</div>
 
-		<!-- - -->
-		<div class="wrap-slick3">
-			<div class="slick3">
-				<div class="item-slick3 item1-slick3">
-					<div class="wrap-content-slide3 p-b-50 p-t-50">
-						<div class="container">
-							<div class="pic-review size14 bo4 wrap-cir-pic m-l-r-auto animated visible-false" data-appear="zoomIn">
-								<img src="images/avatar-01.jpg" alt="IGM-AVATAR">
-							</div>
-
-							<div class="content-review m-t-33 animated visible-false" data-appear="fadeInUp">
-								<p class="t-center txt12 size15 m-l-r-auto">
-									“ We are lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean tellus sem, mattis in pre-tium nec, fermentum viverra dui ”
-								</p>
-
-								<div class="star-review fs-18 color0 flex-c-m m-t-12">
-									<i class="fa fa-star" aria-hidden="true"></i>
-									<i class="fa fa-star p-l-1" aria-hidden="true"></i>
-									<i class="fa fa-star p-l-1" aria-hidden="true"></i>
-									<i class="fa fa-star p-l-1" aria-hidden="true"></i>
-									<i class="fa fa-star p-l-1" aria-hidden="true"></i>
-								</div>
-
-								<div class="more-review txt4 t-center animated visible-false m-t-32" data-appear="fadeInUp">
-									Marie Simmons ˗ New York
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="item-slick3 item2-slick3">
-					<div class="wrap-content-slide3 p-b-50 p-t-50">
-						<div class="container">
-							<div class="pic-review size14 bo4 wrap-cir-pic m-l-r-auto animated visible-false" data-appear="zoomIn">
-								<img src="images/avatar-04.jpg" alt="IGM-AVATAR">
-							</div>
-
-							<div class="content-review m-t-33 animated visible-false" data-appear="fadeInUp">
-								<p class="t-center txt12 size15 m-l-r-auto">
-									“ We are lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean tellus sem, mattis in pre-tium nec, fermentum viverra dui ”
-								</p>
-
-								<div class="star-review fs-18 color0 flex-c-m m-t-12">
-									<i class="fa fa-star" aria-hidden="true"></i>
-									<i class="fa fa-star p-l-1" aria-hidden="true"></i>
-									<i class="fa fa-star p-l-1" aria-hidden="true"></i>
-									<i class="fa fa-star p-l-1" aria-hidden="true"></i>
-									<i class="fa fa-star p-l-1" aria-hidden="true"></i>
-								</div>
-
-								<div class="more-review txt4 t-center animated visible-false m-t-32" data-appear="fadeInUp">
-									Marie Simmons ˗ New York
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="item-slick3 item3-slick3">
-					<div class="wrap-content-slide3 p-b-50 p-t-50">
-						<div class="container">
-							<div class="pic-review size14 bo4 wrap-cir-pic m-l-r-auto animated visible-false" data-appear="zoomIn">
-								<img src="images/avatar-05.jpg" alt="IGM-AVATAR">
-							</div>
-
-							<div class="content-review m-t-33 animated visible-false" data-appear="fadeInUp">
-								<p class="t-center txt12 size15 m-l-r-auto">
-									“ We are lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean tellus sem, mattis in pre-tium nec, fermentum viverra dui ”
-								</p>
-
-								<div class="star-review fs-18 color0 flex-c-m m-t-12">
-									<i class="fa fa-star" aria-hidden="true"></i>
-									<i class="fa fa-star p-l-1" aria-hidden="true"></i>
-									<i class="fa fa-star p-l-1" aria-hidden="true"></i>
-									<i class="fa fa-star p-l-1" aria-hidden="true"></i>
-									<i class="fa fa-star p-l-1" aria-hidden="true"></i>
-								</div>
-
-								<div class="more-review txt4 t-center animated visible-false m-t-32" data-appear="fadeInUp">
-									Marie Simmons ˗ New York
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-			</div>
-
-			<div class="wrap-slick3-dots m-t-30"></div>
-		</div>
+		<!-- Display Map -->
+		<div id="map"></div>
+    <script>
+      var map;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: -34.397, lng: 150.644},
+          zoom: 8
+        });
+      }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"
+    async defer></script>
 	</section>
 
 	<!-- Blog -->
-	<section class="section-blog bg-white p-t-115 p-b-123">
+	<!-- <section class="section-blog bg-white p-t-115 p-b-123">
 		<div class="container">
 			<div class="title-section-ourmenu t-center m-b-22">
 				<span class="tit2 t-center">
@@ -710,9 +653,10 @@
 			</div>
 
 			<div class="row">
-				<div class="col-md-4 p-t-30">
-					<!-- Block1 -->
-					<div class="blo1">
+				<div class="col-md-4 p-t-30"> -->
+
+	<!-- Block1 -->
+	<!-- <div class="blo1">
 						<div class="wrap-pic-blo1 bo-rad-10 hov-img-zoom pos-relative">
 							<a href="blog-detail.html"><img src="images/blog-01.jpg" alt="IMG-INTRO"></a>
 
@@ -738,9 +682,10 @@
 					</div>
 				</div>
 
-				<div class="col-md-4 p-t-30">
-					<!-- Block1 -->
-					<div class="blo1">
+				<div class="col-md-4 p-t-30"> -->
+
+	<!-- Block1 -->
+	<!-- <div class="blo1">
 						<div class="wrap-pic-blo1 bo-rad-10 hov-img-zoom pos-relative">
 							<a href="blog-detail.html"><img src="images/blog-02.jpg" alt="IMG-INTRO"></a>
 
@@ -766,9 +711,10 @@
 					</div>
 				</div>
 
-				<div class="col-md-4 p-t-30">
-					<!-- Block1 -->
-					<div class="blo1">
+				<div class="col-md-4 p-t-30"> -->
+
+	<!-- Block1 -->
+	<!-- <div class="blo1">
 						<div class="wrap-pic-blo1 bo-rad-10 hov-img-zoom pos-relative">
 							<a href="blog-detail.html"><img src="images/blog-03.jpg" alt="IMG-INTRO"></a>
 
@@ -796,7 +742,7 @@
 
 			</div>
 		</div>
-	</section>
+	</section> -->
 
 
 	<!-- Footer -->
@@ -972,23 +918,9 @@
 		</span>
 	</div>
 
+
 	<!-- Container Selection1 -->
 	<div id="dropDownSelect1"></div>
-
-	<!-- Modal Video 01-->
-	<div class="modal fade" id="modal-video-01" tabindex="-1" role="dialog" aria-hidden="true">
-
-		<div class="modal-dialog" role="document" data-dismiss="modal">
-			<div class="close-mo-video-01 trans-0-4" data-dismiss="modal" aria-label="Close">&times;</div>
-
-			<div class="wrap-video-mo-01">
-				<div class="w-full wrap-pic-w op-0-0"><img src="images/icons/video-16-9.jpg" alt="IMG"></div>
-				<div class="video-mo-01">
-					<iframe src="https://www.youtube.com/embed/5k1hSu2gdKE?rel=0&amp;showinfo=0" allowfullscreen></iframe>
-				</div>
-			</div>
-		</div>
-	</div>
 
 
 
