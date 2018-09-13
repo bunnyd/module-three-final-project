@@ -24,8 +24,11 @@ class Api::V1::UsersController < ApplicationController
     if user.valid?
       user.save
       session[:user_id] = user.id
+
+      render json: {success: true}
+
     else
-      render json: user.errors
+      render json: {errors: user.errors}
     end
     # User.create(user_params)
   end

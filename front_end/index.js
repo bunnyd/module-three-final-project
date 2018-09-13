@@ -2,113 +2,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 })
 
+// -------------------------------------------------------
+// Create variables for sign-in, login, and search forms/divs
+// -------------------------------------------------------
 signupUserDiv = document.getElementById("sign-up-div");
+loginUserDiv = document.getElementById("login-div");
 
 signupUserForm = document.getElementById("sign-up");
 loginUserForm = document.getElementById("login");
 
-loginUserForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-
-  let userEmailAddress = event.target[0].value;
-
-  fetch("http://localhost:3000/api/v1/users/login", {
-      method: 'POST',
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify({
-        email: userEmailAddress
-      })
-    })
-    .then(resp => resp.json())
-    .then(user => createSession(user, userEmailAddress))
-})
-
-function showAlert(div_id, form, message, className) {
-  //create div
-  const div = document.createElement('div');
-
-  // Add classes
-  div.className = `alert ${className}`;
-
-  //Add Text
-  div.appendChild(document.createTextNode(message));
-
-  // // Get parent
-  // const container = document.querySelector('.container');
-
-  // Insert Alert
-  div_id.insertBefore(div, form);
-
-  // Timeout after 3 seconds
-  setTimeout(function(){
-    document.querySelector('.alert').remove();
-  }, 5000);
-}//end showAlert
-
-
-function createSession(user, userEmailAddress) {
-  loginUserForm.reset(); //Reset login User Form
-  if (user.email === userEmailAddress) {
-    sessionStorage.setItem("id", user.id);
-
-    // Show search div
-    document.getElementById('search-div').style.display = 'block';
-
-    // Hide login and signup div
-    document.getElementById('login-div').style.display = 'none';
-    document.getElementById('sign-up-div').style.display = 'none';
-
-  } else {
-    // alert("Please enter a valid email address.")
-    showAlert(signupUserDiv, signupUserForm, "Please enter a valid email address.", "error")
-
-  }
-} //end createSession function
-
-
-
-signupUserForm.addEventListener("submit", (event) => {
-  event.preventDefault()
-  let userFirstName = event.target[0].value
-  let userLastName = event.target[1].value
-  let userUserName = event.target[2].value
-  let userEmailAddress = event.target[3].value
-
-  fetch("http://localhost:3000/api/v1/users", {
-    method: "POST",
-    credentials: 'same-origin',
-    headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json"
-    },
-    body: JSON.stringify({
-      first_name: userFirstName,
-      last_name: userLastName,
-      email: userEmailAddress,
-      username: userUserName
-    })
-  })
-    .then(resp => resp.json())
-    .then(errors => signupMessage(errors))
-
-    // no errors, display successful message
-    showAlert(signupUserDiv, signupUserForm, `Account for ${userEmailAddress} has been added!`, "success")
-
-    // hide signup form and display login
-    document.getElementById('sign-up-div').style.display = 'none';
-    document.getElementById('login-div').style.display = 'block';
-
-
-})//end signupUserForm event listener
-
-function signupMessage(errors) {
-  debugger
-  showAlert(signupUserDiv, signupUserForm, JSON.stringify(errors), "error")
-}//end signupMessage function
+searchDiv = document.getElementById('search-div');
+searchForm = document.getElementById('search-form');
 
 // -------------------------------------------------------
 // Check if user has a session
@@ -157,16 +61,143 @@ document.getElementById('signup-link').addEventListener('click', function(event)
   event.preventDefault();
 });
 
+// -------------------------------------------------------
+// Submit login form
+// -------------------------------------------------------
+loginUserForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  let userEmailAddress = event.target[0].value;
+
+  fetch("http://localhost:3000/api/v1/users/login", {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        email: userEmailAddress
+      })
+    })
+    .then(resp => resp.json())
+    .then(user => createSession(user, userEmailAddress))
+})
+
+// -------------------------------------------------------
+// Create session after user logs in
+// -------------------------------------------------------
+function createSession(user, userEmailAddress) {
+  loginUserForm.reset(); //Reset login User Form
+  if (user.email.toLowerCase() === userEmailAddress.toLowerCase()) {
+
+    sessionStorage.setItem("id", user.id);
+
+    // no errors, display successful message
+    showAlert(searchDiv, searchForm, `Logged in as ${userEmailAddress}.`, "success")
+
+    // Hide login and signup div
+    document.getElementById('login-div').style.display = 'none';
+    document.getElementById('sign-up-div').style.display = 'none';
+
+    // Show search div
+    document.getElementById('search-div').style.display = 'block';
+
+  } else {
+    // alert("Please enter a valid email address.")
+    showAlert(loginUserDiv, loginUserForm, "You don't have an account. Please sign up.", "error")
+
+  }
+} //end createSession function
+
+// -------------------------------------------------------
+// Submit Sign-up Form
+// -------------------------------------------------------
+signupUserForm.addEventListener("submit", (event) => {
+  event.preventDefault()
+  let userFirstName = event.target[0].value
+  let userLastName = event.target[1].value
+  let userUserName = event.target[2].value
+  let userEmailAddress = event.target[3].value
+
+  fetch("http://localhost:3000/api/v1/users", {
+    method: "POST",
+    credentials: 'same-origin',
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    body: JSON.stringify({
+      first_name: userFirstName,
+      last_name: userLastName,
+      email: userEmailAddress,
+      username: userUserName
+    })
+  })
+    .then(resp => resp.json())
+    .then(message => signupMessage(message, userEmailAddress))
+
+})//end signupUserForm event listener
+
+// -------------------------------------------------------
+// Display Success/Error Message
+// -------------------------------------------------------
+function showAlert(div_id, form, message, errorTypeClass) {
+  // //create div
+  // const div = document.createElement('div');
+
+  // // Add classes
+  // div.className = `alert ${errorTypeClass}`;
+
+  //create span
+  const span = document.createElement('span');
+
+  // Add classes
+  span.className = `span-center txt6 m-10 alert ${errorTypeClass}`;
+
+  // Add span
+  span.innerHTML += `${message}`;
+  // debugger
+  //Add Text
+  // span.appendChild(document.createTextNode(message));
+
+  // Insert Alert
+  div_id.insertBefore(span, form);
+
+  // Timeout after 5 seconds
+  setTimeout(function(){
+    document.querySelector('.alert').remove();
+  }, 20000);
+
+
+}//end showAlert
+
+// -------------------------------------------------------
+// Display Sign-up message
+// -------------------------------------------------------
+function signupMessage(message, email) {
+  // debugger
+  if (message.success) {
+    // no errors, display successful message
+    showAlert(loginUserDiv, loginUserForm, `Account for ${email} has been added!`, "success")
+
+    // hide signup form and display login
+
+    document.getElementById('sign-up-div').style.display = 'none';
+    document.getElementById('login-div').style.display = 'block';
+  }
+  else {
+    debugger
+    showAlert(signupUserDiv, signupUserForm, JSON.stringify(message), "error")
+  }
+
+}//end signupMessage function
 
 
 // -------------------------------------------------------
 // YELP API
 // -------------------------------------------------------
-
-searchForm = document.getElementById('search-form');
-//event listener
 searchForm.addEventListener('submit', searchFood);
-
 
 function searchFood(event) {
   event.preventDefault();
@@ -347,12 +378,3 @@ function alertRestaurant(indicatedSegment) {
   alert("Enjoy your meal at " + indicatedSegment.text + "!");
 
 }
-
-
-
-
-// Got the session
-//search while the user is logged in
-//user sessionStorage.getItem("email") to check the session
-//search and iterate through yelp API
-//save results to restaurant database
