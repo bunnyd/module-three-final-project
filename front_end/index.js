@@ -96,7 +96,6 @@ loginUserForm.addEventListener("submit", (event) => {
 
 function createSession(user, userEmailAddress) {
   loginUserForm.reset(); //Reset login User Form
-  // debugger
   if (user.email) {
     if (user.email.toLowerCase() === userEmailAddress.toLowerCase()) {
 
@@ -453,7 +452,6 @@ function getRestaurantsFromDB(userRestaurants) {
   //check if user has restaurants
   if (userRestaurants[0].restaurants.length > 0){
     userRestaurants[0].restaurants.forEach(restaurant => {
-      debugger
       tableHead.innerHTML = `
       <tr class="bg1 txt13">
         <th style="width: 400px;">Restaurant Name</th>
