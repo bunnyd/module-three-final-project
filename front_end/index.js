@@ -330,6 +330,14 @@ function displayRestaurants(restaurants) {
 
   function addRestaurantToDom(restaurants) {
     const tableBody = document.getElementById("table-body");
+    tableHead.innerHTML = `
+    <tr class="bg1 txt13">
+      <th style="width: 400px;">Restaurant Name</th>
+      <th style="width: 300px;">Food Category</th>
+      <th style="width: 100px;">Rating</th>
+      <th style="width: 100px;">Price</th>
+    </tr>
+    `
     tableBody.innerHTML +=
     `<tr>
       <td>
