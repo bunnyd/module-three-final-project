@@ -37,10 +37,12 @@
 
 	<!-- Header -->
 	<header>
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+		<script src="alert/dist/sweetalert-dev.js"></script>
+	  <link rel="stylesheet" href="alert/dist/sweetalert.css">
 		<script src='Winwheel.js'></script>
 		<style>
-			#login-div,
-			#search-div {
+			#login-div, #search-div, #wheel-section {
 				display: none;
 			}
 
@@ -435,33 +437,8 @@
 						<button type="submit" class="btn3 flex-c-m size18 txt11 trans-0-4 m-l-r-auto" id="spin-button">
               Spin
             </button>
-						<a id="reset-wheel-link" href="#" >Reset</a><br />
-						<a id="accept-wheel-link" href="#" >Accept</a><br />
+						<a id="edit-search-link" href="#" >Edit Search</a><br />
 
-						<!-- <td>
-              <div class="power_controls">
-                  <br />
-                  <br />
-                  <table class="power" cellpadding="10" cellspacing="0">
-                      <tr>
-                          <th align="center">Power</th>
-                      </tr>
-                      <tr>
-                          <td width="78" align="center" id="pw3" onClick="powerSelected(3);">High</td>
-                      </tr>
-                      <tr>
-                          <td align="center" id="pw2" onClick="powerSelected(2);">Med</td>
-                      </tr>
-                      <tr>
-                          <td align="center" id="pw1" onClick="powerSelected(1);">Low</td>
-                      </tr>
-                  </table>
-                  <br />
-                  <img id="spin_button" src="http://dougtesting.net//elements/images/examples/spin_off.png" alt="Spin" onClick="startSpin();" />
-                  <br /><br />
-                  &nbsp;&nbsp;<a href="#" onClick="resetWheel(); return false;">Play Again</a><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(reset)
-              </div>
-          </td> -->
 					</div>
 				</div>
 
@@ -472,54 +449,10 @@
                         <p style="{color: white}" align="center">Sorry, your browser doesn't support canvas. Please try another.</p>
                     </canvas>
 						</td>
+						<!-- Wheel -->
 						<div id="wheel">
-							<!-- <script>
-              var theWheel = new Winwheel({
-                  'outerRadius'     : 190,        // Set outer radius so wheel fits inside the background.
-                  'innerRadius'     : 50,         // Make wheel hollow so segments dont go all way to center.
-                  'textFontSize'    : 12,         // Set default font size for the segments.
-                  'textOrientation' : 'horizontal', // Make text vertial so goes down from the outside of wheel.
-                  'textAlignment'   : 'inner',    // Align text to outside of wheel.
-                  'numSegments'     : 7,         // Specify number of segments.
-                  'segments'        :             // Define segments including colour and text.
-                  [                               // font size and text colour overridden on backrupt segments.
-                     {'fillStyle' : '#ee1c24', 'text' : 'Olive Garden'},
-                     {'fillStyle' : '#3cb878', 'text' : 'Burger King'},
-                     {'fillStyle' : '#f6989d', 'text' : 'McDonalds'},
-                     {'fillStyle' : '#00aef0', 'text' : 'Popeyes'},
-                     {'fillStyle' : '#f26522', 'text' : 'Chipotle'},
-                     {'fillStyle' : '#fff200', 'text' : 'Shipleys'},
-                     {'fillStyle' : '#00aef0', 'text' : 'Fat Bao'}
-                  ],
-                  'animation' :           // Specify the animation to use.
-                  {
-                      'type'     : 'spinToStop',
-                      'duration' : 8,
-                      'spins'    : 3,
-                      'callbackFinished' : alertPrize
-                  }
-              });
-              // Called when the animation has finished.
-              function alertPrize(indicatedSegment)
-              {
-                alert("Enjoy your meal at " + indicatedSegment.text + "!");
-                  // // Display different message if win/lose/backrupt.
-                  // if (indicatedSegment.text == 'LOOSE TURN')
-                  // {
-                  //     alert('Sorry but you loose a turn.');
-                  // }
-                  // else if (indicatedSegment.text == 'BANKRUPT')
-                  // {
-                  //     alert('Oh no, you have gone BANKRUPT!');
-                  // }
-                  // else
-                  // {
-                  //     alert("You have won " + indicatedSegment.text);
-                  // }
-              }
-          </script> -->
+
 						</div>
-						<!-- <img src="images/our-story-01.jpg" alt="IMG-OUR"> -->
 					</div>
 				</div>
 			</div>
@@ -643,7 +576,7 @@
 			const map = new google.maps.Map(mapDiv, options)
 		}
 		</script>
-		<script src="https://maps.googleapis.com/maps/api/js?key=&callback=initMap"
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpdjDvdd5hE922G4eBoOpmAck5Sz6y0SY&callback=initMap"
 		 async defer></script>
 	</section> -->
 

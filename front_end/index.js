@@ -26,6 +26,9 @@ if (sessionStorage.getItem("id")) {
 
   // Show search div
   document.getElementById('search-div').style.display = 'block';
+
+  // Display login message
+  showAlert(searchDiv, searchForm, `Logged in as ${sessionStorage.getItem("email")}.`, "success")
 } else {
   // Show sign-up div
   document.getElementById('sign-up-div').style.display = 'block';
@@ -90,9 +93,12 @@ loginUserForm.addEventListener("submit", (event) => {
 
 function createSession(user, userEmailAddress) {
   loginUserForm.reset(); //Reset login User Form
-  if (user.email.toLowerCase() === userEmailAddress.toLowerCase()) {
+  // debugger
+  if (user.email) {
+    if (user.email.toLowerCase() === userEmailAddress.toLowerCase()) {
 
     sessionStorage.setItem("id", user.id);
+    sessionStorage.setItem("email", userEmailAddress.toLowerCase());
 
     // no errors, display successful message
     showAlert(searchDiv, searchForm, `Logged in as ${userEmailAddress}.`, "success")
@@ -103,8 +109,9 @@ function createSession(user, userEmailAddress) {
 
     // Show search div
     document.getElementById('search-div').style.display = 'block';
-
-  } else {
+    }
+  }
+ else {
     // alert("Please enter a valid email address.")
     showAlert(loginUserDiv, loginUserForm, "You don't have an account. Please sign up.", "error")
 
@@ -165,10 +172,10 @@ function showAlert(div_id, form, message, errorTypeClass) {
   // Insert Alert
   div_id.insertBefore(span, form);
 
-  // Timeout after 5 seconds
+  // Timeout after 10 seconds
   setTimeout(function(){
     document.querySelector('.alert').remove();
-  }, 20000);
+  }, 10000);
 
 
 }//end showAlert
@@ -196,7 +203,7 @@ function signupMessage(message, email) {
 
 
 // -------------------------------------------------------
-// YELP API
+// YELP API - Submit search form
 // -------------------------------------------------------
 searchForm.addEventListener('submit', searchFood);
 
@@ -204,6 +211,7 @@ function searchFood(event) {
   event.preventDefault();
 
   if (sessionStorage.getItem("id")) {
+
     let searchFoodType = event.target[0].value;
     let searchZipCode = event.target[1].value;
     let searchPriceRange = event.target[2].value;
@@ -224,6 +232,12 @@ function searchFood(event) {
       })
       .then(resp => resp.json())
       .then(restaurants => displayRestaurants(restaurants))
+
+      // Show wheel section
+      document.getElementById('wheel-section').style.display = 'block';
+
+      // hide search div
+      document.getElementById('search-div').style.display = 'none';
     }
     else {
       alert("Please log in.")
@@ -232,30 +246,84 @@ function searchFood(event) {
 
 function displayRestaurants(restaurants) {
   const wheel = document.getElementById("wheel");
-  console.log(restaurants)
+  // console.log(restaurants)
   var businesses = restaurants.businesses
 
   var length = 22;
 
   function selectedRestaurant(randomlySelectedRestaurant) {
-    alert("Would you like to eat at " + randomlySelectedRestaurant.text + "?");
+    // alert("Would you like to eat at " + randomlySelectedRestaurant.text + "?");
 
-    document.getElementById('accept-wheel-link').addEventListener('click', event => acceptRestaurant(event, randomlySelectedRestaurant));
+    businesses.forEach(business => {
+      if (randomlySelectedRestaurant.id === business.id){
+        var selectedRestaurantName = business.name
+        // debugger
+        JSalert(selectedRestaurantName);
+
+      }
+    })
+
+    // document.getElementById('accept-wheel-link').addEventListener('click', event => acceptRestaurant(event, randomlySelectedRestaurant));
   }
 
+  // -------------------------------------------------------
+  // Display alert for user to spin again or accept
+  // -------------------------------------------------------
+  function JSalert(selectedRestaurantName) {
+    // swal(
+    //   {
+    //     title: `Would you like to eat at ${selectedRestaurantName}?`,
+    //     buttons: ["Spin Again", "Accept"],
+    //     icon: "info",
+    //   })
+
+      swal({
+          title: `Go try ${selectedRestaurantName}!`,
+          text: "Are you satisfied with this choice?",
+          // icon: "warning",
+          buttons: ["Spin Again", "Absolutely!"]
+
+        })
+        .then(accepted => {
+          if (accepted) {
+            swal("Enjoy your meal!", "This search has been saved to your history.", "success");
+            acceptRestaurant(selectedRestaurantName);
+
+          } else {
+            resetWheel();
+          }
+        });
+
+      //
+      // {
+      //   title: "Your account will be deleted permanently!",
+      //   text: "Are you sure to proceed?",
+      //   icon: "warning",
+      //   showCancelButton: true,
+      //   confirmButtonColor: "#DD6B55",
+      //   confirmButtonText: "Remove My Account!",
+      //   cancelButtonText: "I am not sure!",
+      //   closeOnConfirm: false,
+      //   closeOnCancel: false
+      // })
+      // function isConfirm() {
+      //   if (isConfirm) {
+      //     swal("Account Removed!", "Your account is removed permanently!", "success");
+      //   } else {
+      //     swal("Hurray", "Account is not removed!", "error");
+      //   }
+      // });
+  }
 
   // -------------------------------------------------------
   // Function for accept button.
   // -------------------------------------------------------
-  function acceptRestaurant(event, acceptedRestaurant) {
-    event.preventDefault();
+  function acceptRestaurant(acceptedRestaurant) {
+    // event.preventDefault();
     //Save to backend - user and restaurant name, location,
 
-    // fetch => post to the restaurants URL
-    restaurantId = acceptedRestaurant.id
-
     businesses.forEach(business => {
-      if (acceptedRestaurant.id === business.id){
+      if (acceptedRestaurant === business.name){
 
         //creates restaurant object if the user presses accept
         fetch(`http://localhost:3000/api/v1/users/${sessionStorage.getItem("id")}`, {
@@ -280,24 +348,27 @@ function displayRestaurants(restaurants) {
     })//end businesses.forEach
   }//end acceptRestaurant function
 
-  function addRestaurantToUser(restaurant) {
-    // fetch => post to the user_restaurants URL to associate with user
-    // Can't post to this URL because we don't have the data from the Yelp API.
-    // how do we get data?
-    console.log(sessionStorage.getItem("id"))
-    fetch(`http://localhost:3000/api/v1/users/${sessionStorage.getItem("id")}`, {
-      method: "PUT",
-      credentials: 'same-origin',
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      body: JSON.stringify({
-        restaurant_id: restaurant.id,
-        user_id: sessionStorage.getItem("id")
-      })
-    })
-  }
+  // // -------------------------------------------------------
+  // // Click handler for spin button.
+  // // -------------------------------------------------------
+  // function addRestaurantToUser(restaurant) {
+  //   // fetch => post to the user_restaurants URL to associate with user
+  //   // Can't post to this URL because we don't have the data from the Yelp API.
+  //   // how do we get data?
+  //   console.log(sessionStorage.getItem("id"))
+  //   fetch(`http://localhost:3000/api/v1/users/${sessionStorage.getItem("id")}`, {
+  //     method: "PUT",
+  //     credentials: 'same-origin',
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       "Accept": "application/json"
+  //     },
+  //     body: JSON.stringify({
+  //       restaurant_id: restaurant.id,
+  //       user_id: sessionStorage.getItem("id")
+  //     })
+  //   })
+  // }
 
 
 
@@ -363,8 +434,18 @@ function displayRestaurants(restaurants) {
 
   // Wheel event listeners
   document.getElementById('spin-button').addEventListener('click', startSpin);
-  document.getElementById('reset-wheel-link').addEventListener('click', resetWheel);
+  document.getElementById('edit-search-link').addEventListener('click', editSearchLink);
 
+  function editSearchLink(event){
+    event.preventDefault();
+
+    // Show search div
+    document.getElementById('search-div').style.display = 'block';
+
+    // Hide wheel section
+    document.getElementById('wheel-section').style.display = 'none';
+
+  }
 
   // Vars used by the code in this page to do power controls.
   var wheelPower = 0;
@@ -389,8 +470,8 @@ function displayRestaurants(restaurants) {
   // -------------------------------------------------------
   // Function for reset button.
   // -------------------------------------------------------
-  function resetWheel(event) {
-    event.preventDefault();
+  function resetWheel() {
+    // event.preventDefault();
     theWheel.stopAnimation(false); // Stop the animation, false as param so does not call callback function.
     theWheel.rotationAngle = 0; // Re-set the wheel angle to 0 degrees.
     theWheel.draw(); // Call draw to render changes to the wheel.
