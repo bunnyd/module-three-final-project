@@ -205,13 +205,14 @@ function signupMessage(message, email) {
 // -------------------------------------------------------
 // YELP API - Submit search form
 // -------------------------------------------------------
+
+// search form event listener
 searchForm.addEventListener('submit', searchFood);
 
 function searchFood(event) {
   event.preventDefault();
 
   if (sessionStorage.getItem("id")) {
-
     let searchFoodType = event.target[0].value;
     let searchZipCode = event.target[1].value;
     let searchPriceRange = event.target[2].value;
@@ -238,12 +239,16 @@ function searchFood(event) {
 
       // hide search div
       document.getElementById('search-div').style.display = 'none';
-    }
-    else {
-      alert("Please log in.")
-    }
-}
 
+  }//end if
+  else {
+      alert("Please log in.")
+  }
+}//end searchFood function
+
+// -------------------------------------------------------
+// Display yelp results on the wheel
+// -------------------------------------------------------
 function displayRestaurants(restaurants) {
   const wheel = document.getElementById("wheel");
   // console.log(restaurants)
@@ -251,77 +256,46 @@ function displayRestaurants(restaurants) {
 
   var length = 22;
 
+  // -------------------------------------------------------
+  // Wheel selects a restaurant
+  // -------------------------------------------------------
   function selectedRestaurant(randomlySelectedRestaurant) {
     // alert("Would you like to eat at " + randomlySelectedRestaurant.text + "?");
 
     businesses.forEach(business => {
       if (randomlySelectedRestaurant.id === business.id){
         var selectedRestaurantName = business.name
-        // debugger
         JSalert(selectedRestaurantName);
-
       }
     })
-
-    // document.getElementById('accept-wheel-link').addEventListener('click', event => acceptRestaurant(event, randomlySelectedRestaurant));
-  }
+  }//end selectedRestaurant function
 
   // -------------------------------------------------------
   // Display alert for user to spin again or accept
   // -------------------------------------------------------
   function JSalert(selectedRestaurantName) {
-    // swal(
-    //   {
-    //     title: `Would you like to eat at ${selectedRestaurantName}?`,
-    //     buttons: ["Spin Again", "Accept"],
-    //     icon: "info",
-    //   })
+    swal({
+        title: `Go try ${selectedRestaurantName}!`,
+        text: "Are you satisfied with this choice?",
+        // icon: "warning",
+        buttons: ["Spin Again", "Absolutely!"]
+      })
+      .then(accepted => {
+        if (accepted) {
+          swal("Enjoy your meal!", "This search has been saved to your history.", "success");
+          acceptRestaurant(selectedRestaurantName);
 
-      swal({
-          title: `Go try ${selectedRestaurantName}!`,
-          text: "Are you satisfied with this choice?",
-          // icon: "warning",
-          buttons: ["Spin Again", "Absolutely!"]
-
-        })
-        .then(accepted => {
-          if (accepted) {
-            swal("Enjoy your meal!", "This search has been saved to your history.", "success");
-            acceptRestaurant(selectedRestaurantName);
-
-          } else {
-            resetWheel();
-          }
-        });
-
-      //
-      // {
-      //   title: "Your account will be deleted permanently!",
-      //   text: "Are you sure to proceed?",
-      //   icon: "warning",
-      //   showCancelButton: true,
-      //   confirmButtonColor: "#DD6B55",
-      //   confirmButtonText: "Remove My Account!",
-      //   cancelButtonText: "I am not sure!",
-      //   closeOnConfirm: false,
-      //   closeOnCancel: false
-      // })
-      // function isConfirm() {
-      //   if (isConfirm) {
-      //     swal("Account Removed!", "Your account is removed permanently!", "success");
-      //   } else {
-      //     swal("Hurray", "Account is not removed!", "error");
-      //   }
-      // });
-  }
+        } else {
+          resetWheel();
+        }
+      });
+  }//end JSalert function
 
   // -------------------------------------------------------
   // Function for accept button.
   // -------------------------------------------------------
   function acceptRestaurant(acceptedRestaurant) {
-    // event.preventDefault();
     //Save to backend - user and restaurant name, location,
-
     businesses.forEach(business => {
       if (acceptedRestaurant === business.name){
 
@@ -343,35 +317,11 @@ function displayRestaurants(restaurants) {
         })//end fetch
         .then(res => res.json())
         .then(console.log)
-//        .then(restaurant => addRestaurantToUser(restaurant))
-      }//end if (acceptedRestaurant.id === restaurantId)
-    })//end businesses.forEach
+      }//end if
+    })//end forEach
   }//end acceptRestaurant function
 
-  // // -------------------------------------------------------
-  // // Click handler for spin button.
-  // // -------------------------------------------------------
-  // function addRestaurantToUser(restaurant) {
-  //   // fetch => post to the user_restaurants URL to associate with user
-  //   // Can't post to this URL because we don't have the data from the Yelp API.
-  //   // how do we get data?
-  //   console.log(sessionStorage.getItem("id"))
-  //   fetch(`http://localhost:3000/api/v1/users/${sessionStorage.getItem("id")}`, {
-  //     method: "PUT",
-  //     credentials: 'same-origin',
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       "Accept": "application/json"
-  //     },
-  //     body: JSON.stringify({
-  //       restaurant_id: restaurant.id,
-  //       user_id: sessionStorage.getItem("id")
-  //     })
-  //   })
-  // }
-
-
-
+  // Create the wheel
   var theWheel = new Winwheel({
     'outerRadius': 190, // Set outer radius so wheel fits inside the background.
     'innerRadius': 20, // Make wheel hollow so segments dont go all way to center.
@@ -436,6 +386,9 @@ function displayRestaurants(restaurants) {
   document.getElementById('spin-button').addEventListener('click', startSpin);
   document.getElementById('edit-search-link').addEventListener('click', editSearchLink);
 
+  // -------------------------------------------------------
+  // Edit search link will hide wheel and show search.
+  // -------------------------------------------------------
   function editSearchLink(event){
     event.preventDefault();
 
@@ -444,7 +397,6 @@ function displayRestaurants(restaurants) {
 
     // Hide wheel section
     document.getElementById('wheel-section').style.display = 'none';
-
   }
 
   // Vars used by the code in this page to do power controls.
@@ -464,7 +416,6 @@ function displayRestaurants(restaurants) {
     // Set to true so that power can't be changed and spin button re-enabled during
     // the current animation. The user will have to reset before spinning again.
     wheelSpinning = true;
-
   }
 
   // -------------------------------------------------------
