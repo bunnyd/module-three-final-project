@@ -289,7 +289,8 @@ function displayRestaurants(restaurants) {
         if (accepted) {
           swal("Enjoy your meal!", "This search has been saved to your history.", "success");
           acceptRestaurant(selectedRestaurantName);
-
+          //getHistory();
+          // getRestaurantsFromDB();
         } else {
           resetWheel();
         }
@@ -321,11 +322,31 @@ function displayRestaurants(restaurants) {
           })
         })//end fetch
         .then(res => res.json())
-        .then(console.log)
+        .then(user => addRestaurantToDom(user.restaurants))
+        // .then(console.log)
       }//end if
     })//end forEach
   }//end acceptRestaurant function
 
+  function addRestaurantToDom(restaurants) {
+    const tableBody = document.getElementById("table-body");
+    tableBody.innerHTML +=
+    `<tr>
+      <td>
+        ${restaurants[restaurants.length-1].name}
+      </td>
+      <td>
+        ${restaurants[restaurants.length-1].food_type}
+      </td>
+      <td>
+        ${restaurants[restaurants.length-1].rating}
+      </td>
+      <td>
+        ${restaurants[restaurants.length-1].price_range}
+      </td>
+    </tr>
+    `
+  }
   // Create the wheel
   var theWheel = new Winwheel({
     'outerRadius': 190, // Set outer radius so wheel fits inside the background.
@@ -436,22 +457,27 @@ function displayRestaurants(restaurants) {
 }
 
 const tableHead = document.getElementById("table-head");
-const tableBody = document.getElementById("table-body");
+// const tableBody = document.getElementById("table-body");
 const displayNohistory = document.getElementById("no-history");
 
 
+function getHistory() {
+  fetch(`http://localhost:3000/api/v1/users/${sessionStorage.getItem("id")}`)
+  .then(res => res.json())
+  .then(userRestaurants => getRestaurantsFromDB(userRestaurants))
+}
 
-fetch(`http://localhost:3000/api/v1/users/${sessionStorage.getItem("id")}`)
-.then(res => res.json())
-.then(userRestaurants => getRestaurantsFromDB(userRestaurants))
+getHistory();
 
 // -------------------------------------------------------
 // Function to display search history
 // -------------------------------------------------------
 function getRestaurantsFromDB(userRestaurants) {
   //check if user has restaurants
+  const tableBody = document.getElementById("table-body");
   if (userRestaurants[0].restaurants.length > 0){
     userRestaurants[0].restaurants.forEach(restaurant => {
+
       tableHead.innerHTML = `
       <tr class="bg1 txt13">
         <th style="width: 400px;">Restaurant Name</th>
@@ -460,6 +486,7 @@ function getRestaurantsFromDB(userRestaurants) {
         <th style="width: 100px;">Price</th>
       </tr>
       `
+
       tableBody.innerHTML +=
       `<tr>
         <td>
@@ -486,7 +513,5 @@ function getRestaurantsFromDB(userRestaurants) {
       No searches made for ${userEmail}.
     </p>
     `
-
-
   }
 }
