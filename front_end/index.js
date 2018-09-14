@@ -275,7 +275,7 @@ function displayRestaurants(restaurants) {
   // -------------------------------------------------------
   function JSalert(selectedRestaurantName) {
     swal({
-        title: `Go try ${selectedRestaurantName}!`,
+        title: `You're going to ${selectedRestaurantName}!`,
         text: "Are you satisfied with this choice?",
         // icon: "warning",
         buttons: ["Spin Again", "Absolutely!"]
