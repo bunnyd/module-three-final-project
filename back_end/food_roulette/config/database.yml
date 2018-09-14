@@ -24,11 +24,11 @@ default: &default
 development:
   <<: *default
   database: food_roulette_development
-  # adapter: postgresql
-  # encoding: unicode
-  # pool: 5
-  # username: myapp
-  # password: password1
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  username: myapp
+  password: password1
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
@@ -63,11 +63,11 @@ development:
 test:
   <<: *default
   database: food_roulette_test
-  # adapter: postgresql
-  # encoding: unicode
-  # pool: 5
-  # username: myapp
-  # password: password1
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  username: myapp
+  password: password1
 
 
 

@@ -39,14 +39,18 @@
 	<header>
 		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 		<script src="alert/dist/sweetalert-dev.js"></script>
-	  <link rel="stylesheet" href="alert/dist/sweetalert.css">
+		<link rel="stylesheet" href="alert/dist/sweetalert.css">
 		<script src='Winwheel.js'></script>
 		<style>
-			#login-div, #search-div, #wheel-section {
+			#login-div,
+			#search-div,
+			#wheel-section,
+			#history-section {
 				display: none;
 			}
 
 			/* style for error/success messages */
+
 			.success,
 			.error {
 				color: white;
@@ -69,6 +73,7 @@
 			}
 
 			/* style for google maps */
+
 			#map {
 				height: 700px;
 				width: 100%;
@@ -81,6 +86,26 @@
 				height: 100%;
 				margin: 0;
 				padding: 0;
+			}
+
+			table.center {
+				margin-left: auto;
+				margin-right: auto;
+			}
+
+			table#table1 {
+				text-align: center;
+				margin-left: auto;
+				margin-right: auto;
+				width: 100%;
+				white-space: nowrap;
+				border: 1px solid black;
+			}
+			tr, td {
+				border: solid thin;
+			}
+			th {
+				text-align:center;
 			}
 		</style>
 		<!-- Header desktop -->
@@ -437,7 +462,7 @@
 						<button type="submit" class="btn3 flex-c-m size18 txt11 trans-0-4 m-l-r-auto" id="spin-button">
               Spin
             </button>
-						<a id="edit-search-link" href="#" >Edit Search</a><br />
+						<a id="edit-search-link" href="#">Edit Search</a><br />
 
 					</div>
 				</div>
@@ -462,41 +487,52 @@
 		</div>
 	</section>
 
-	<!-- Search History -->
-	<section class="section-intro">
-		<div id="history-div" class="header-intro parallax100 t-center p-t-135 p-b-158" style="background-image: url(images/bg-discover.jpg);">
+	<!-- Thank you -->
+	<section>
+		<div class="header-intro parallax100 t-center p-t-135 p-b-158" style="background-image: url(images/bg-discover.jpg);">
 			<span class="tit2 p-l-15 p-r-15">
-				Your Search History on
-			</span>
+					Thank you for using
+				</span>
 
 			<h3 class="tit4 t-center p-l-15 p-r-15 p-t-3">
-				Food Roulette
-			</h3>
+					Food Roulette
+				</h3>
 		</div>
+	</section>
 
-		<div class="col-md-4 p-t-30">
-			<!-- Block1 -->
 
-		<div class="content-intro bg-white p-t-77 p-b-133">
+	<!-- Search History -->
+	<section id="history-section" class="bg-white p-t-85 p-b-85 t-center p-l-15 p-r-15">
+		<span class="tit2 t-center">
+				Food Roulette
+			</span>
+
+		<h3 class="tit3 t-center m-b-35 m-t-5">
+				Search History
+			</h3>
+
+		<div class="content-intro bg-white">
 			<div class="container">
-				<div class="row">
-						<table role='grid' align='center'>
-							<thead>
-								<tr>
-									<th>Restaurant Name |</th>
-									<th>Food Category |</th>
-									<th>Rating |</th>
-									<th>Price |</th>
-								</tr>
-							</thead>
-							<tbody id="table-body">
-							</tbody>
-						</table>
+				<div class="row" id="no-history">
+					<table class="center" id="table1" style="text-align:center; border: 1px solid black;">
+						<thead id="table-head">
+							<!-- <tr class="bg1 txt13">
+								<th style="width: 400px;">Restaurant Name</th>
+								<th style="width: 300px;">Food Category</th>
+								<th style="width: 100px;">Rating</th>
+								<th style="width: 100px;">Price</th>
+							</tr> -->
+						</thead>
+						<tbody id="table-body">
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 	</section>
 
-	<!-- Review -->
+
+	<!-- Location -->
 	<section class="section-review bg1-pattern p-t-100 p-b-110">
 		<!-- - -->
 		<div class="title-review t-center m-b-2">
@@ -510,18 +546,19 @@
 		</div>
 
 		<!-- Display Map -->
-		<div>
-		<div id="map"></div>
-		<script src="https://maps.googleapis.com/maps/api/js?key="></script>
-		<script>
-			var map = new google.maps.Map(document.getElementById('map'), {
-				center: {
-					lat: 29.7604,
-					lng: -95.3698
-				},
-				zoom: 12
-			});
-		</script></div>
+		<!-- <div>
+			<div id="map"></div>
+			<script src="https://maps.googleapis.com/maps/api/js?key="></script>
+			<script>
+				var map = new google.maps.Map(document.getElementById('map'), {
+					center: {
+						lat: 29.7604,
+						lng: -95.3698
+					},
+					zoom: 12
+				});
+			</script>
+		</div> -->
 
 		<!-- <div id="map"></div>
 		<script>
@@ -642,7 +679,6 @@
 			</div>
 		</div>
 	</section> -->
-
 
 	<!-- Footer -->
 	<footer class="bg1">

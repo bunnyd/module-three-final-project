@@ -27,6 +27,9 @@ if (sessionStorage.getItem("id")) {
   // Show search div
   document.getElementById('search-div').style.display = 'block';
 
+  // Show history section
+  document.getElementById('history-section').style.display = 'block';
+
   // Display login message
   showAlert(searchDiv, searchForm, `Logged in as ${sessionStorage.getItem("email")}.`, "success")
 } else {
@@ -109,6 +112,9 @@ function createSession(user, userEmailAddress) {
 
     // Show search div
     document.getElementById('search-div').style.display = 'block';
+
+    // Show history section
+    document.getElementById('history-section').style.display = 'block';
     }
   }
  else {
@@ -430,29 +436,59 @@ function displayRestaurants(restaurants) {
   }
 }
 
-const tableBody = document.getElementById("table-body")
+const tableHead = document.getElementById("table-head");
+const tableBody = document.getElementById("table-body");
+const displayNohistory = document.getElementById("no-history");
+
+
 
 fetch(`http://localhost:3000/api/v1/users/${sessionStorage.getItem("id")}`)
 .then(res => res.json())
-.then(userRestaurants => getRestaurantsFromDB(userRestaurants, tableBody))
+.then(userRestaurants => getRestaurantsFromDB(userRestaurants))
 
-function getRestaurantsFromDB(userRestaurants, tableBody) {
-  userRestaurants[0].restaurants.forEach(restaurant => {
-    tableBody.innerHTML +=
-    `<tr>
-      <td>
-        ${restaurant.name}
-      </td>
-      <td>
-        ${restaurant.food_type}
-      </td>
-      <td>
-        ${restaurant.rating}
-      </td>
-      <td>
-        ${restaurant.price_range}
-      </td>
-    </tr>
+// -------------------------------------------------------
+// Function to display search history
+// -------------------------------------------------------
+function getRestaurantsFromDB(userRestaurants) {
+  //check if user has restaurants
+  if (userRestaurants[0].restaurants.length > 0){
+    userRestaurants[0].restaurants.forEach(restaurant => {
+      debugger
+      tableHead.innerHTML = `
+      <tr class="bg1 txt13">
+        <th style="width: 400px;">Restaurant Name</th>
+        <th style="width: 300px;">Food Category</th>
+        <th style="width: 100px;">Rating</th>
+        <th style="width: 100px;">Price</th>
+      </tr>
+      `
+      tableBody.innerHTML +=
+      `<tr>
+        <td>
+          ${restaurant.name}
+        </td>
+        <td>
+          ${restaurant.food_type}
+        </td>
+        <td>
+          ${restaurant.rating}
+        </td>
+        <td>
+          ${restaurant.price_range}
+        </td>
+      </tr>
+      `
+    })
+  }//end if
+  else {
+    userEmail = userRestaurants[0].email
+
+    displayNohistory.innerHTML = `
+    <p class="t-center size32 m-l-r-auto">
+      No searches made for ${userEmail}.
+    </p>
     `
-  })
+
+
+  }
 }
