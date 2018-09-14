@@ -429,3 +429,30 @@ function displayRestaurants(restaurants) {
     wheelSpinning = false; // Reset to false to power buttons and spin can be clicked again.
   }
 }
+
+const tableBody = document.getElementById("table-body")
+
+fetch(`http://localhost:3000/api/v1/users/${sessionStorage.getItem("id")}`)
+.then(res => res.json())
+.then(userRestaurants => getRestaurantsFromDB(userRestaurants, tableBody))
+
+function getRestaurantsFromDB(userRestaurants, tableBody) {
+  userRestaurants[0].restaurants.forEach(restaurant => {
+    tableBody.innerHTML +=
+    `<tr>
+      <td>
+        ${restaurant.name}
+      </td>
+      <td>
+        ${restaurant.food_type}
+      </td>
+      <td>
+        ${restaurant.rating}
+      </td>
+      <td>
+        ${restaurant.price_range}
+      </td>
+    </tr>
+    `
+  })
+}
